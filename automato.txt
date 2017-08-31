@@ -1,0 +1,9 @@
+({a, b}, {q0, q1, q2, qf}, &, q0, {qf})
+q0, a, q1
+q0, b, q2
+q1, a, qf
+q1, b, q2
+q2, a, q1
+q2, b, qf
+qf, a, qf
+qf, b, qf
