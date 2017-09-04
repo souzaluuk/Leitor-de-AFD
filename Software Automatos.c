@@ -1,7 +1,18 @@
+/*
+**Programação:
+* Lucas Gabriel de Souza
+* Leonardo Furtado
+*-----------------
+**Documentação:
+* Leonardo Furtado
+*-----------------
+**Testes:
+* Lucas Gabriel Souza
+* Raphael Camilo Gomes Camara
+*/
 #include "SoftwareAutomatos.h"
 
-int main()
-{
+int main(){
 	FILE *fp;
 	CADEIA *alf = NULL, *palavra = NULL;
 	ESTADO *est = NULL;
@@ -12,7 +23,7 @@ int main()
 	int cont = 0, cont_virg = 0;
 
 	fp = fopen(caminho_arq, "r");
-	if ( fp == NULL ){
+	if (!fp){
 		printf("Arquivo '%s' nao encontrado\n",caminho_arq);
 		system("pause");
 		return 0;
@@ -114,6 +125,7 @@ int main()
 		ler_automato(palavra,regra,est_finais,estado_inicio);
 	else
 		printf("PALAVRA NAO ACEITA");
+
 	printf("\n");
 	system("pause");
 	return 0;
