@@ -1,3 +1,15 @@
+/*
+**Programação:
+* Lucas Gabriel de Souza
+* Leonardo Furtado
+*-----------------
+**Documentação:
+* Leonardo Furtado
+*-----------------
+**Testes:
+* Lucas Gabriel Souza
+* Raphael Camilo Gomes Camara
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,6 +34,7 @@ typedef struct estados{
 	struct estados *prox;
 }ESTADO;
 
+//load das funcoes
 void guarda_char(CADEIA **p, char letra);
 void print_char(CADEIA *p);
 int vazio_char(CADEIA *p);
@@ -45,11 +58,12 @@ int valida_conjunto_est(ESTADO *est_princ, ESTADO *est_secun);
 void filtra_estados(FILE **fp, ESTADO **p);
 
 //Escopo das funcoes
+
+//Realiza os testes de validação atraves da chamada de outras funções
 void ler_automato(CADEIA *palavra, REGRA *regra, ESTADO *estados_finais, char estado_inicio[]){
 	CADEIA *tmp = palavra;
 
 	int tam = tam_palavra(palavra), i;
-	//char palavra_tmp[tam];
 	char est_tmp[4];
 
 	printf("Palavra: ");
@@ -57,7 +71,7 @@ void ler_automato(CADEIA *palavra, REGRA *regra, ESTADO *estados_finais, char es
 	printf("\n");
 
 	for ( i=0; i<tam; i++ ){
-		if ( prox_estado(regra,estado_inicio,palavra->letra) != NULL ){
+		if ( prox_estado(regra,estado_inicio,palavra->letra)){
 			strcpy(est_tmp,estado_inicio);
 			strcpy(estado_inicio,prox_estado(regra,estado_inicio,palavra->letra));
 
@@ -77,6 +91,7 @@ void ler_automato(CADEIA *palavra, REGRA *regra, ESTADO *estados_finais, char es
 		printf("\nPALAVRA NAO ACEITA");
 }
 
+//
 char* prox_estado(REGRA *p, char estado_origem[], char letra){
 	while( !vazio_regra(p) ){
 		if ( strcmp(estado_origem,p->estado_origem) == 0 && p->letra == letra)
@@ -103,6 +118,7 @@ void imprime_passo(CADEIA *p, char estado[], int posi){
 	printf("\n");
 }
 
+//Funcao que valida palavra de acordo com o alfabeto
 int palavra_valida(CADEIA *p, CADEIA *alf){
 	while ( !vazio_char(p) ){
 		if ( !char_existe(alf,p->letra) ){
@@ -112,6 +128,7 @@ int palavra_valida(CADEIA *p, CADEIA *alf){
 	}
 	return 1;
 }
+
 //Retorna o tamanho da cadeia
 int tam_palavra(CADEIA *p){
 	int cont=0;
@@ -142,7 +159,7 @@ void guarda_char(CADEIA **p, char letra){
 		*p = p1;
 	}else{
 		p2 = *p;
-		while (p2->prox != NULL)
+		while (p2->prox)
 			p2 = p2->prox;
 		p2->prox = p1;
 	}
@@ -161,24 +178,22 @@ int vazio_char(CADEIA *p){
 	return (p==NULL);
 }
 
+//Função que recebe uma letra e verifica sua existencia no alfabeto
 int char_existe(CADEIA *p, char letra){
 	int cont = 0;
 	//O laco percorre toda a fila do tipo ALFABETO
-	//verificando a existencia da letra passada pra funcao atual
-	//no Conjunto Alfabeto
 	while( !vazio_char(p) ){
 		if ( p->letra == letra )
 			cont++;
 		p = p->prox;
 	}
 	//Caso exista apenas um correspondente e retornado 1
-	return ( cont == 1 )?1:0;
+	return ( cont == 1 );
 }
 
 //Funcoes Estados
 void enfileira_est(ESTADO **p, char estado[]){
 	ESTADO *p1 = (ESTADO*)malloc(sizeof(ESTADO)), *p2;
-	//p1->estado = estado;
 	strcpy(p1->estado, estado);
 	p1->prox = NULL;
 
@@ -186,15 +201,18 @@ void enfileira_est(ESTADO **p, char estado[]){
 		*p = p1;
 	}else{
 		p2 = *p;
-		while (p2->prox != NULL)
+		while (p2->prox)
 			p2 = p2->prox;
 		p2->prox = p1;
 	}
 }
+
+//Verifica se o estado passado e vazio
 int vazio_est(ESTADO *p){
-	return(p == NULL)?1:0;
+	return(p == NULL);
 }
 
+//Recebe um struct de estados e os imprime na tela
 void imprime_est(ESTADO *p){
 	while( !vazio_est(p) ){
 		printf("%s ",p->estado);
@@ -202,6 +220,7 @@ void imprime_est(ESTADO *p){
 	}
 }
 
+//retorna o tamanho do estado
 int tam_est(char estado[]){
 	int i = 0;
 	while(estado[i] != '\0')
@@ -209,6 +228,7 @@ int tam_est(char estado[]){
 	return i;
 }
 
+//
 void filtra_estados(FILE **fp, ESTADO **p){
 	char letra = ' ';
 	while ( letra != '}' ){
@@ -230,6 +250,7 @@ void filtra_estados(FILE **fp, ESTADO **p){
 		}
 	}
 }
+
 //
 int valida_conjunto_est(ESTADO *est_princ, ESTADO *est_secun){
 	while ( !vazio_est(est_secun) ){
@@ -241,6 +262,7 @@ int valida_conjunto_est(ESTADO *est_princ, ESTADO *est_secun){
 	}
 	return 1;
 }
+
 //
 int valida_estado(ESTADO *est, char estado[]){
 	int cont = 0;
@@ -250,7 +272,7 @@ int valida_estado(ESTADO *est, char estado[]){
 			cont++;
 		est = est->prox;
 	}
-	return (cont == 1)?1:0;
+	return (cont == 1);
 }
 
 //Funcoes Regras
@@ -266,16 +288,18 @@ void enfileira_regra(REGRA **p, char est_origem[], char letra, char est_destino[
 		*p = p1;
 	}else{
 		p2 = *p;
-		while (p2->prox != NULL)
+		while (p2->prox)
 			p2 = p2->prox;
 		p2->prox = p1;
 	}
 }
+
 //Funcao que verifica se o ponteiro da regra passada e nulo
 //Usado na funcao imprime_regra
 int vazio_regra(REGRA *p){
-	return(p == NULL)?1:0;
+	return(p == NULL);
 }
+
 //Funcao que imprime as regras de transicao do automato
 void imprime_regra(REGRA *p){
 	while( !vazio_regra(p) ){
